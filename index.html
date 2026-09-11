@@ -905,15 +905,15 @@
         <form onsubmit="handleContact(event)">
           <div class="form-group">
             <label>Як тебе звати?</label>
-            <input type="text" class="form-input" placeholder="Ім'я або нікнейм" required />
+            <input type="text" id="contactName" class="form-input" placeholder="Ім'я або нікнейм" required />
           </div>
           <div class="form-group">
             <label>Твій контакт (Telegram / Email)</label>
-            <input type="text" class="form-input" placeholder="@handle або пошта" required />
+            <input type="text" id="contactHandle" class="form-input" placeholder="@handle або пошта" required />
           </div>
           <div class="form-group">
             <label>Повідомлення</label>
-            <textarea class="form-textarea" rows="4" placeholder="Що хотів сказати?" required></textarea>
+            <textarea id="contactMsg" class="form-textarea" rows="4" placeholder="Що хотів сказати?" required></textarea>
           </div>
           <button type="submit" class="buy-btn" style="background: var(--orange); color: #000;">Відправити меседж 🚀</button>
         </form>
@@ -969,7 +969,7 @@
           <input type="text" id="orderAddress" class="form-input" placeholder="Київ, Відділення №24" required />
         </div>
         <div style="margin-top: 24px;">
-          <button type="submit" class="buy-btn">Підтвердити замовлення 🔥</button>
+          <button type="submit" class="buy-btn">Підтвердити замовлення у Telegram 🔥</button>
         </div>
       </form>
     </div>
@@ -1080,7 +1080,7 @@
       }
     }
 
-    // 4. ОФОРМЛЕННЯ
+    // 4. ОФОРМЛЕННЯ ТА НАДСИЛАННЯ ЗАМОВЛЕННЯ В TELEGRAM
     function openCheckout() {
       if (cart.length === 0) {
         alert('Корзина порожня! Спочатку вибери товар.');
@@ -1096,14 +1096,27 @@
 
     function submitOrder(e) {
       e.preventDefault();
-      const name = document.getElementById('orderName').value;
+      const name = document.getElementById('orderName').value.trim();
+      const phone = document.getElementById('orderPhone').value.trim();
+      const address = document.getElementById('orderAddress').value.trim();
       const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      
+
+      let itemsText = cart.map(i => `• ${i.name} (${i.qty} шт.) — ${i.price * i.qty} грн`).join('\n');
+
+      const message = encodeURIComponent(
+        `🛒 НОВЕ ЗАМОВЛЕННЯ З GROK STORE 2.0!\n\n` +
+        `👤 Клієнт: ${name}\n` +
+        `📞 Телефон: ${phone}\n` +
+        `📦 Нова Пошта: ${address}\n\n` +
+        `🛍️ ТОВАРИ:\n${itemsText}\n\n` +
+        `💰 РАЗОМ ДО СПЛАТИ: ${total} грн`
+      );
+
+      window.open(`https://t.me/omelian1?text=${message}`, '_blank');
+
       closeCheckout();
       cart = [];
       updateCart();
-
-      alert(`Дякуємо, ${name}! Замовлення на суму ${total} грн прийнято.\nПриїде за 2-3 дні Новою Поштою 😈`);
     }
 
     // 5. ГЕНЕРАТОР КІКІ
@@ -1129,10 +1142,21 @@
       }, 1000);
     }
 
-    // 6. ФОРМА ЗВОРОТНОГО ЗВ'ЯЗКУ
+    // 6. НАДСИЛАННЯ ПОВІДОМЛЕННЯ З ФОРМИ КОНТАКТІВ В TELEGRAM
     function handleContact(e) {
       e.preventDefault();
-      alert('Повідомлення надіслано! Скоро вийдемо на звʼязок 🔥');
+      const name = document.getElementById('contactName').value.trim();
+      const handle = document.getElementById('contactHandle').value.trim();
+      const msg = document.getElementById('contactMsg').value.trim();
+
+      const text = encodeURIComponent(
+        `🔥 НОВИЙ МЕСЕДЖ З ФОРМИ GROK STORE 2.0:\n\n` +
+        `👤 Ім'я: ${name}\n` +
+        `📱 Контакт: ${handle}\n` +
+        `💬 Повідомлення: ${msg}`
+      );
+
+      window.open(`https://t.me/omelian1?text=${text}`, '_blank');
       e.target.reset();
     }
 
@@ -1152,10 +1176,10 @@
       document.getElementById('navLinks').classList.remove('open');
     }
 
-    // Ініціалізація при старті
+    // Ініціалізація
     renderProducts();
     updateCart();
-    console.log('%cGrok Store 2.0 прокачано на 100%! 🔥', 'color:#f97316; font-size:16px; font-weight:800');
+    console.log('%cGrok Store 2.0 готовий, привʼязано до @omelian1 🔥', 'color:#f97316; font-size:16px; font-weight:800');
   </script>
 </body>
 </html>
