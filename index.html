@@ -4,166 +4,1158 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Grok Store 2.0 • Купи все, бля</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    :root { --orange: #f97316; --bg: #0f0f0f; --text: #fff; }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-    .container { max-width:1400px; margin:0 auto; padding:0 20px; }
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet" />
 
-    /* NAV */
-    .navbar {
-      position:sticky; top:0; z-index:9999; background:rgba(15,15,15,0.95);
-      backdrop-filter:blur(20px); border-bottom:1px solid #333; padding:15px 0;
+  <style>
+    :root {
+      --orange: #f97316;
+      --orange-hover: #ea580c;
+      --purple: #a855f7;
+      --purple-hover: #9333ea;
+      --bg: #0a0a0c;
+      --surface: #141417;
+      --surface-hover: #1b1b20;
+      --border: #27272e;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --radius: 16px;
     }
-    .nav-content { display:flex; align-items:center; justify-content:space-between; }
-    .logo { font-family:'Space Grotesk',sans-serif; font-size:2rem; font-weight:700; color:var(--orange); }
-    .nav-links { display:flex; gap:35px; list-style:none; font-weight:600; }
-    .nav-links a { color:#ddd; transition:0.2s; }
-    .nav-links a:hover { color:var(--orange); }
-    .cart { background:var(--orange); color:#000; padding:10px 24px; border-radius:999px; font-weight:700; cursor:pointer; transition:0.2s; }
-    .cart:hover { transform:scale(1.1); }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .brand-font {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: rgba(10, 10, 12, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+    }
+
+    .nav-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--text);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .logo span {
+      color: var(--orange);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      list-style: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--orange);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cart-btn {
+      background: var(--orange);
+      color: #000;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .cart-btn:hover {
+      background: var(--orange-hover);
+      transform: scale(1.03);
+    }
+
+    .cart-badge {
+      background: #000;
+      color: #fff;
+      font-size: 0.8rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: 1px solid var(--border);
+      color: #fff;
+      font-size: 1.4rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
 
     /* HERO */
     #hero {
-      height:100vh; display:flex; align-items:center; background:linear-gradient(135deg,#111,#000);
-      position:relative; overflow:hidden;
+      min-height: calc(100vh - 75px);
+      display: flex;
+      align-items: center;
+      position: relative;
+      background: radial-gradient(circle at 80% 20%, rgba(249, 115, 22, 0.15), transparent 50%),
+                  radial-gradient(circle at 10% 80%, rgba(168, 85, 247, 0.12), transparent 45%);
+      padding: 60px 0;
     }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      align-items: center;
+      gap: 40px;
+      width: 100%;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      color: var(--orange);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+    }
+
     .hero-content h1 {
-      font-family:'Space Grotesk',sans-serif; font-size:5.5rem; line-height:1.05; font-weight:700; margin-bottom:20px;
+      font-size: clamp(2.8rem, 6vw, 5.2rem);
+      line-height: 1.05;
+      font-weight: 800;
+      margin-bottom: 24px;
     }
-    .hero-content h1 span { color:var(--orange); }
-    .hero-content p { font-size:1.5rem; max-width:600px; margin-bottom:40px; }
 
-    /* PRODUCTS */
+    .hero-content h1 span {
+      background: linear-gradient(90deg, var(--orange), #fb923c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-content p {
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      color: var(--text-muted);
+      max-width: 580px;
+      margin-bottom: 36px;
+    }
+
+    .hero-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .primary-btn {
+      background: var(--orange);
+      color: #000;
+      padding: 16px 36px;
+      border-radius: 999px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+
+    .primary-btn:hover {
+      background: var(--orange-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(249, 115, 22, 0.4);
+    }
+
+    .secondary-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border);
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 999px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: #555;
+    }
+
+    .hero-banner-box {
+      background: linear-gradient(145deg, #18181b, #111114);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    }
+
+    .hero-banner-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(249, 115, 22, 0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-emoji-display {
+      font-size: 6.5rem;
+      display: inline-block;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* SECTION BASICS */
+    section {
+      padding: 90px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2.2rem, 4vw, 3.2rem);
+      margin-bottom: 12px;
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* PRODUCTS GRID */
     .product-grid {
-      display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:30px; margin:80px 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 28px;
     }
-    .card {
-      background:#1a1a1a; border:1px solid #333; border-radius:16px; overflow:hidden; transition:0.4s;
-    }
-    .card:hover { transform:translateY(-15px); box-shadow:0 30px 60px rgba(249,115,22,0.3); }
-    .card-img {
-      height:240px; background:linear-gradient(45deg,#f97316,#ff9f00); display:flex; align-items:center; justify-content:center;
-      font-size:7rem; color:#fff; position:relative; overflow:hidden;
-    }
-    .card-img::after {
-      content:''; position:absolute; width:100%; height:100%; background:radial-gradient(circle,#fff 0%,transparent 70%);
-      animation:shine 4s infinite linear;
-    }
-    @keyframes shine { 0%{transform:rotate(0deg)} 100%{transform:rotate(360deg)} }
-    .card-body { padding:24px; }
-    .card-body h3 { font-size:1.4rem; margin-bottom:8px; }
-    .card-body .price { font-size:1.8rem; font-weight:700; color:var(--orange); margin-bottom:16px; }
-    .buy-btn {
-      width:100%; background:var(--orange); color:#000; padding:16px; border:none; border-radius:999px;
-      font-weight:700; font-size:1.05rem; cursor:pointer; transition:0.3s;
-    }
-    .buy-btn:hover { background:#ea580c; transform:scale(1.05); }
 
-    /* КІКІ КНОПКА */
-    .kiki-btn {
-      margin-top:16px; background:#9f00ff; color:#fff; padding:12px 24px; border-radius:999px; font-weight:700;
-      cursor:pointer; transition:0.3s; width:100%; text-align:center;
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s, box-shadow 0.3s;
     }
-    .kiki-btn:hover { background:#c026d3; transform:scale(1.05); }
+
+    .card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(249, 115, 22, 0.5);
+      box-shadow: 0 20px 40px -15px rgba(249, 115, 22, 0.25);
+    }
+
+    .card-img {
+      height: 220px;
+      background: linear-gradient(135deg, #1f1f24, #121215);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5.5rem;
+      position: relative;
+      user-select: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .card-tag {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--orange);
+    }
+
+    .card-body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .card-body h3 {
+      font-size: 1.35rem;
+      margin-bottom: 6px;
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      min-height: 44px;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-top: auto;
+      margin-bottom: 18px;
+    }
+
+    .card-body .price {
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: var(--orange);
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .stock-label {
+      font-size: 0.8rem;
+      color: #22c55e;
+      font-weight: 600;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .buy-btn {
+      width: 100%;
+      background: var(--orange);
+      color: #000;
+      padding: 14px;
+      border: none;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .buy-btn:hover {
+      background: var(--orange-hover);
+    }
+
+    .buy-btn:active {
+      transform: scale(0.98);
+    }
+
+    .kiki-btn {
+      background: rgba(168, 85, 247, 0.15);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      color: #d8b4fe;
+      padding: 11px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .kiki-btn:hover {
+      background: var(--purple);
+      color: #fff;
+    }
+
+    /* ABOUT SECTION */
+    .about-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .about-list {
+      list-style: none;
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .about-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.05rem;
+    }
+
+    .about-badge {
+      width: 28px;
+      height: 28px;
+      background: rgba(249, 115, 22, 0.15);
+      color: var(--orange);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    /* CASES / DROPS */
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .case-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 30px;
+    }
+
+    .case-item span.drop-date {
+      color: var(--orange);
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+    }
+
+    .case-item h3 {
+      font-size: 1.4rem;
+      margin: 10px 0;
+    }
+
+    .case-item p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* CONTACT */
+    .contact-box {
+      max-width: 650px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 40px;
+      border-radius: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      background: #0c0c0e;
+      border: 1px solid var(--border);
+      padding: 14px;
+      border-radius: 12px;
+      color: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--orange);
+    }
+
+    /* DRAWER CART */
+    .cart-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .cart-drawer-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: -450px;
+      width: 100%;
+      max-width: 440px;
+      height: 100vh;
+      background: #121215;
+      border-left: 1px solid var(--border);
+      z-index: 2001;
+      display: flex;
+      flex-direction: column;
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .cart-drawer.active {
+      right: 0;
+    }
+
+    .cart-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-header h3 {
+      font-size: 1.3rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.8rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .close-btn:hover { color: #fff; }
+
+    .cart-items {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .cart-empty {
+      text-align: center;
+      color: var(--text-muted);
+      margin: auto;
+      font-size: 1.1rem;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 14px;
+      background: #18181c;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      align-items: center;
+    }
+
+    .cart-item-icon {
+      font-size: 2rem;
+      width: 50px;
+      height: 50px;
+      background: #23232a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+
+    .cart-item-info {
+      flex-grow: 1;
+    }
+
+    .cart-item-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .cart-item-price {
+      color: var(--orange);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .cart-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qty-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      background: #2a2a32;
+      border: none;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .qty-btn:hover { background: var(--orange); color: #000; }
+
+    .cart-footer {
+      padding: 24px;
+      border-top: 1px solid var(--border);
+      background: #141418;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      background: var(--orange);
+      color: #000;
+      padding: 16px;
+      border-radius: 999px;
+      border: none;
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .checkout-btn:hover {
+      background: var(--orange-hover);
+    }
+
+    /* CHECKOUT MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-card {
+      background: #141418;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 500px;
+      padding: 30px;
+      position: relative;
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #22c55e;
+      color: #000;
+      font-weight: 700;
+      padding: 12px 24px;
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      z-index: 4000;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .toast.active {
+      transform: translateX(-50%) translateY(0);
+    }
 
     /* FOOTER */
-    footer { background:#111; padding:60px 0; text-align:center; margin-top:100px; }
-    footer p { color:#aaa; font-size:0.9rem; }
+    footer {
+      background: #09090b;
+      border-top: 1px solid var(--border);
+      padding: 60px 0 30px;
+      text-align: center;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .about-box { grid-template-columns: 1fr; }
+      .menu-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #0f0f13;
+        flex-direction: column;
+        padding: 24px;
+        border-bottom: 1px solid var(--border);
+        gap: 16px;
+      }
+      .nav-links.open { display: flex; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- NAVBAR -->
   <nav class="navbar">
     <div class="container nav-content">
-      <div class="logo">Grok<span>Store 2.0</span></div>
-      <ul class="nav-links">
-        <li><a href="#shop">Магазин</a></li>
-        <li><a href="#about">Про мене</a></li>
-        <li><a href="#cases">Кейси</a></li>
-        <li><a href="#contact">Контакт</a></li>
+      <a href="#" class="logo brand-font">Grok<span>Store 2.0</span></a>
+      
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#shop" onclick="closeMenu()">Магазин</a></li>
+        <li><a href="#about" onclick="closeMenu()">Про мене</a></li>
+        <li><a href="#cases" onclick="closeMenu()">Кейси</a></li>
+        <li><a href="#contact" onclick="closeMenu()">Контакт</a></li>
       </ul>
-      <div class="cart" onclick="alert('Корзина оновлена! 🔥')">🛒 Корзина (3)</div>
+
+      <div class="nav-actions">
+        <button class="cart-btn" onclick="toggleCart(true)">
+          🛒 Корзина <span class="cart-badge" id="cartCount">0</span>
+        </button>
+        <button class="menu-toggle" onclick="toggleMenu()" aria-label="Меню">☰</button>
+      </div>
     </div>
   </nav>
 
   <!-- HERO -->
   <section id="hero">
-    <div class="container" style="display:flex; align-items:center; gap:80px; height:100vh;">
-      <div class="hero-content">
-        <h1>Купи все, бля<br><span>з Grok Store 2.0</span></h1>
-        <p>Український рэп-стиль. Максимум смаку. Ніяких лімітів.</p>
-        <button onclick="alert('Замовлено! Приїде за 3 дні 😈')" style="background:var(--orange);color:#000;padding:18px 48px;border:none;border-radius:999px;font-size:1.2rem;font-weight:700;cursor:pointer;">
-          Купити зараз →
-        </button>
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-tag">🔥 Дроп 2026 вже онлайн</div>
+          <h1>Купи все, бля<br><span>з Grok Store 2.0</span></h1>
+          <p>Український рэп-стиль. Максимум смаку. Ніяких лімітів, цензури чи компромісів.</p>
+          <div class="hero-btns">
+            <a href="#shop" class="primary-btn">Каталог товарів →</a>
+            <a href="#about" class="secondary-btn">Хто ми взагалі?</a>
+          </div>
+        </div>
+
+        <div class="hero-banner-box">
+          <div class="hero-emoji-display">📦⚡️</div>
+          <h3 style="margin-top: 15px; font-size: 1.5rem;">Ексклюзивний мерч & гір</h3>
+          <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 8px;">Відправляємо Новою Поштою по всій Україні за 24 години.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- SHOP -->
-  <section id="shop" class="container">
-    <h2 style="font-family:'Space Grotesk',sans-serif;font-size:3.5rem;text-align:center;margin-bottom:50px;">Що продаємо</h2>
-    <div class="product-grid">
-      <!-- Card 1 -->
-      <div class="card">
-        <div class="card-img">👟</div>
-        <div class="card-body">
-          <h3>Air Grok 2026</h3>
-          <div class="price">1999 грн</div>
-          <button class="buy-btn">Замовити</button>
-          <button class="kiki-btn" onclick="generateKiki(this)">Згенерувати кікі Grok</button>
+  <section id="shop">
+    <div class="container">
+      <div class="section-header">
+        <h2>Що продаємо</h2>
+        <p>Бестселери дропу. Обирай і залітай у кошик.</p>
+      </div>
+
+      <div class="product-grid" id="productsContainer">
+        <!-- Генерується через JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="about-box">
+        <div>
+          <span style="color: var(--orange); font-weight: 700; text-transform: uppercase;">Маніфест</span>
+          <h2 style="font-size: 2.5rem; margin: 12px 0 18px;">Чому ми не такі, як інші шопи</h2>
+          <p style="color: var(--text-muted); font-size: 1.05rem;">
+            Ми робимо речі для тих, кому набрид стерильний корпоративний маркетинг. Справжня енергія, прямолінійність і висока якість без зайвої маячні.
+          </p>
+          <ul class="about-list">
+            <li><span class="about-badge">✓</span> Преміальні матеріали, які служать роками</li>
+            <li><span class="about-badge">✓</span> Власна інтеграція ШІ-генерацій через Grok</li>
+            <li><span class="about-badge">✓</span> Швидка доставка та чесні повернення без нервів</li>
+          </ul>
+        </div>
+        <div style="background: #1a1a20; padding: 30px; border-radius: 18px; border: 1px solid var(--border);">
+          <h3 style="font-size: 1.4rem; margin-bottom: 12px;">Статистика Grok Store:</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+            <div>
+              <div style="font-size: 2.2rem; font-weight: 800; color: var(--orange);">1.2k+</div>
+              <div style="color: var(--text-muted); font-size: 0.9rem;">Замовлень відправлено</div>
+            </div>
+            <div>
+              <div style="font-size: 2.2rem; font-weight: 800; color: var(--purple);">99.4%</div>
+              <div style="color: var(--text-muted); font-size: 0.9rem;">Задоволених клієнтів</div>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- Card 2 -->
-      <div class="card">
-        <div class="card-img">📱</div>
-        <div class="card-body">
-          <h3>Grok Phone Pro</h3>
-          <div class="price">3299 грн</div>
-          <button class="buy-btn">Замовити</button>
-          <button class="kiki-btn" onclick="generateKiki(this)">Згенерувати кікі Grok</button>
+    </div>
+  </section>
+
+  <!-- CASES / DROPS -->
+  <section id="cases">
+    <div class="container">
+      <div class="section-header">
+        <h2>Останні кейси та дропи</h2>
+        <p>Історії запусків, які рознесли мережу.</p>
+      </div>
+
+      <div class="cases-grid">
+        <div class="case-item">
+          <span class="drop-date">Січень 2026</span>
+          <h3>Drop #01: Cyber Punk Hype</h3>
+          <p>Повний солдаут першої партії кросівок Air Grok всього за 48 хвилин після публікації в Threads.</p>
+        </div>
+        <div class="case-item">
+          <span class="drop-date">Лютий 2026</span>
+          <h3>Grok Neural Pods</h3>
+          <p>Інтеграція смарт-чіпів шумозаглушення для максимального занурення в біти та подкасти.</p>
+        </div>
+        <div class="case-item">
+          <span class="drop-date">Березень 2026</span>
+          <h3>Grok Phone Collab</h3>
+          <p>Лімітований тираж флагманських гаджетів у матовому чорно-помаранчевому корпусі.</p>
         </div>
       </div>
-      <!-- Card 3 -->
-      <div class="card">
-        <div class="card-img">🎧</div>
-        <div class="card-body">
-          <h3>Grok Headphones</h3>
-          <div class="price">899 грн</div>
-          <button class="buy-btn">Замовити</button>
-          <button class="kiki-btn" onclick="generateKiki(this)">Згенерувати кікі Grok</button>
-        </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-header">
+        <h2>Маєш питання чи пропозицію?</h2>
+        <p>Напиши прямо нам, без ботів і формалізму.</p>
+      </div>
+
+      <div class="contact-box">
+        <form onsubmit="handleContact(event)">
+          <div class="form-group">
+            <label>Як тебе звати?</label>
+            <input type="text" class="form-input" placeholder="Ім'я або нікнейм" required />
+          </div>
+          <div class="form-group">
+            <label>Твій контакт (Telegram / Email)</label>
+            <input type="text" class="form-input" placeholder="@handle або пошта" required />
+          </div>
+          <div class="form-group">
+            <label>Повідомлення</label>
+            <textarea class="form-textarea" rows="4" placeholder="Що хотів сказати?" required></textarea>
+          </div>
+          <button type="submit" class="buy-btn" style="background: var(--orange); color: #000;">Відправити меседж 🚀</button>
+        </form>
       </div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <p>&copy; 2026 Grok Store 2.0 • Зроблено в Україні з матом і любов'ю</p>
-    <p style="margin-top:10px;font-size:0.9rem;color:#a8a29e;">Без лімітів. Без цензури. Без пиздіння.</p>
+    <div class="container">
+      <p style="font-weight: 700; font-size: 1.1rem; color: #fff;">&copy; 2026 Grok Store 2.0 • Зроблено в Україні з матом і любов'ю</p>
+      <p style="margin-top: 8px; font-size: 0.9rem; color: #71717a;">Без лімітів. Без цензури. Без пиздіння.</p>
+    </div>
   </footer>
 
+  <!-- CART DRAWER -->
+  <div class="cart-drawer-overlay" id="cartOverlay" onclick="toggleCart(false)"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3>Твоя корзина</h3>
+      <button class="close-btn" onclick="toggleCart(false)">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItemsList">
+      <!-- Рендериться через JS -->
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Разом до сплати:</span>
+        <span id="cartTotalSum" style="color: var(--orange);">0 грн</span>
+      </div>
+      <button class="checkout-btn" onclick="openCheckout()">Оформити замовлення →</button>
+    </div>
+  </div>
+
+  <!-- CHECKOUT MODAL -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h3 style="font-size: 1.4rem;">Оформлення замовлення</h3>
+        <button class="close-btn" onclick="closeCheckout()">&times;</button>
+      </div>
+      <form onsubmit="submitOrder(event)">
+        <div class="form-group">
+          <label>Прізвище та ім'я</label>
+          <input type="text" id="orderName" class="form-input" placeholder="Тарас Шевченко" required />
+        </div>
+        <div class="form-group">
+          <label>Номер телефону</label>
+          <input type="tel" id="orderPhone" class="form-input" placeholder="+380 (__) ___-__-__" required />
+        </div>
+        <div class="form-group">
+          <label>Місто та № відділення Нової Пошти</label>
+          <input type="text" id="orderAddress" class="form-input" placeholder="Київ, Відділення №24" required />
+        </div>
+        <div style="margin-top: 24px;">
+          <button type="submit" class="buy-btn">Підтвердити замовлення 🔥</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toastMessage">Товар додано до кошика!</div>
+
   <script>
-    // === GROK КІКІ (реальна генерація) ===
-    const GROK_API_KEY = 'xai-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'; // Твій API Key сюди
+    // 1. БАЗА ТОВАРІВ
+    const products = [
+      { id: 1, name: 'Air Grok 2026', price: 1999, icon: '👟', desc: 'Ексклюзивний стрітвер-снікер із підсиленою підошвою.' },
+      { id: 2, name: 'Grok Phone Pro', price: 3299, icon: '📱', desc: 'Ніяких обмежень. Чистий андроїд, кібер-дизайн.' },
+      { id: 3, name: 'Grok Headphones', price: 899, icon: '🎧', desc: 'Глибокий бас і повна ізоляція від зайвого шуму навколо.' }
+    ];
 
-    async function generateKiki(btn) {
-      btn.textContent = 'Генерую кікі...';
-      btn.disabled = true;
+    let cart = [];
 
-      // Симуляція генерації (замість реального API для прикладу)
-      setTimeout(() => {
-        btn.textContent = '✅ Кікі згенеровано!';
-        btn.style.background = '#9f00ff';
-        alert('Кікі згенеровано! Відкривається в новій вкладці...');
-        window.open('https://picsum.photos/id/1015/800/800', '_blank');
-      }, 1200);
+    // 2. РЕНДЕР КАРТОК
+    function renderProducts() {
+      const container = document.getElementById('productsContainer');
+      container.innerHTML = products.map(p => `
+        <div class="card">
+          <div class="card-img">
+            <span class="card-tag">TOP DROP</span>
+            ${p.icon}
+          </div>
+          <div class="card-body">
+            <h3>${p.name}</h3>
+            <p class="card-desc">${p.desc}</p>
+            <div class="price-row">
+              <div class="price">${p.price} грн</div>
+              <span class="stock-label">В наявності</span>
+            </div>
+            <div class="card-actions">
+              <button class="buy-btn" onclick="addToCart(${p.id})">Замовити у кошик</button>
+              <button class="kiki-btn" onclick="generateKiki(this, '${p.name}')">Згенерувати кікі Grok</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
     }
 
-    console.log('%cGrok Store 2.0 завантажено, старий! 🔥 Максимум вайбу', 'color:#f97316; font-size:15px; font-weight:700');
+    // 3. РОБОТА З КОШИКОМ
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const existing = cart.find(item => item.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+      updateCart();
+      showToast(`«${product.name}» додано в кошик! 🔥`);
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(i => i.id === id);
+      if (!item) return;
+      item.qty += delta;
+      if (item.qty <= 0) {
+        cart = cart.filter(i => i.id !== id);
+      }
+      updateCart();
+    }
+
+    function updateCart() {
+      const countEl = document.getElementById('cartCount');
+      const listEl = document.getElementById('cartItemsList');
+      const totalEl = document.getElementById('cartTotalSum');
+
+      const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+      const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+      countEl.textContent = totalCount;
+      totalEl.textContent = `${totalPrice} грн`;
+
+      if (cart.length === 0) {
+        listEl.innerHTML = '<div class="cart-empty">Корзина порожня, бля.<br>Додай щось із каталогу! 👀</div>';
+        return;
+      }
+
+      listEl.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div class="cart-item-icon">${item.icon}</div>
+          <div class="cart-item-info">
+            <div class="cart-item-title">${item.name}</div>
+            <div class="cart-item-price">${item.price * item.qty} грн</div>
+          </div>
+          <div class="cart-controls">
+            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+            <span style="font-weight:700; font-size:0.9rem;">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleCart(open) {
+      const drawer = document.getElementById('cartDrawer');
+      const overlay = document.getElementById('cartOverlay');
+      if (open) {
+        drawer.classList.add('active');
+        overlay.classList.add('active');
+      } else {
+        drawer.classList.remove('active');
+        overlay.classList.remove('active');
+      }
+    }
+
+    // 4. ОФОРМЛЕННЯ
+    function openCheckout() {
+      if (cart.length === 0) {
+        alert('Корзина порожня! Спочатку вибери товар.');
+        return;
+      }
+      toggleCart(false);
+      document.getElementById('checkoutModal').classList.add('active');
+    }
+
+    function closeCheckout() {
+      document.getElementById('checkoutModal').classList.remove('active');
+    }
+
+    function submitOrder(e) {
+      e.preventDefault();
+      const name = document.getElementById('orderName').value;
+      const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+      
+      closeCheckout();
+      cart = [];
+      updateCart();
+
+      alert(`Дякуємо, ${name}! Замовлення на суму ${total} грн прийнято.\nПриїде за 2-3 дні Новою Поштою 😈`);
+    }
+
+    // 5. ГЕНЕРАТОР КІКІ
+    function generateKiki(btn, productName) {
+      const originalText = btn.textContent;
+      btn.textContent = 'Генерую кікі... ⚡️';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.textContent = '✅ Кікі згенеровано!';
+        btn.style.background = '#9333ea';
+        btn.style.color = '#fff';
+
+        showToast(`Кікі для ${productName} готово!`);
+        window.open('https://picsum.photos/seed/' + encodeURIComponent(productName) + '/800/800', '_blank');
+
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.disabled = false;
+          btn.style.background = '';
+          btn.style.color = '';
+        }, 3000);
+      }, 1000);
+    }
+
+    // 6. ФОРМА ЗВОРОТНОГО ЗВ'ЯЗКУ
+    function handleContact(e) {
+      e.preventDefault();
+      alert('Повідомлення надіслано! Скоро вийдемо на звʼязок 🔥');
+      e.target.reset();
+    }
+
+    // 7. TOAST & MENU
+    function showToast(text) {
+      const toast = document.getElementById('toastMessage');
+      toast.textContent = text;
+      toast.classList.add('active');
+      setTimeout(() => toast.classList.remove('active'), 2500);
+    }
+
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('open');
+    }
+
+    function closeMenu() {
+      document.getElementById('navLinks').classList.remove('open');
+    }
+
+    // Ініціалізація при старті
+    renderProducts();
+    updateCart();
+    console.log('%cGrok Store 2.0 прокачано на 100%! 🔥', 'color:#f97316; font-size:16px; font-weight:800');
   </script>
 </body>
 </html>
